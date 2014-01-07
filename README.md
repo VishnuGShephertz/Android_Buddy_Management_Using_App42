@@ -33,4 +33,101 @@ A. Change App42ApiKey and App42ApiSecret that you have received in step 2 or 3 a
 
 # Design Details:
 
+All source code communication with App42 API is written in  App42ServiceApi.java file.
+
+__Initialize Services:__ At first you have to register on App42 using your APIKEY and SECRETKEY keys. And have to intialiaze all services first.
+
+```
+   
+		App42API.initialize(context, Constants.App42ApiKey,
+				Constants.App42ApiSecret);
+		this.userService = App42API.buildUserService();
+		this.buddyService = App42API.buildBuddyService();
+		this.avatarService = App42API.buildAvatarService();
+		this.uploadService=App42API.buildUploadService();
+		App42CacheManager.setPolicy(Policy.NETWORK_FIRST);
+		App42API.setOfflineStorage(true);
+	
+```
+__Registering User:__ To use application first you have to register for this application by passing your userName, password and email-id.
+```
+   
+	public void createUser(final String name, final String pswd,
+			final String email, final UserEventListener callBack) {
+		final Handler callerThreadHandler = new Handler();
+		new Thread() {
+			@Override
+			public void run() {
+				try {
+					final User user = userService.createUser(name, pswd, email);
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							callBack.onUserCreated(user);
+						}
+					});
+				} catch (final App42Exception ex) {
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							if (callBack != null) {
+								callBack.onUserCreated(null);
+							}
+						}
+					});
+
+				}
+			}
+		}.start();
+	}
+	
+```
+__Registering User:__ To use application first you have to register for this application by passing your userName, password and email-id.
+```
+public void authenticateUser(final String name, final String pswd,
+			final UserEventListener callBack) {
+		final Handler callerThreadHandler = new Handler();
+		new Thread() {
+			@Override
+			public void run() {
+				try {
+					final App42Response response = userService.authenticate(
+							name, pswd);
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							callBack.onUserAuthenticated(response);
+						}
+					});
+				} catch (final App42Exception ex) {
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							if (callBack != null) {
+								System.out.println(ex.toString());
+								callBack.onUserAuthenticated(null);
+							}
+						}
+					});
+				}
+			}
+		}.start();
+	}
+```
+
+__Registering User:__ To use application first you have to register for this application by passing your userName, password and email-id.
+```
+```
+
+__Registering User:__ To use application first you have to register for this application by passing your userName, password and email-id.
+```
+```
+
+__Registering User:__ To use application first you have to register for this application by passing your userName, password and email-id.
+```
+```
+
+__Registering User:__ To use application first you have to register for this application by passing your userName, password and email-id.
+```
+```
 

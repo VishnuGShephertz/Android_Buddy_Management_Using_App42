@@ -82,7 +82,7 @@ __Registering User:__ To use application first you have to register for this app
 	}
 	
 ```
-__Registering User:__ To use application first you have to register for this application by passing your userName, password and email-id.
+__Authenticate User:__ Once you register with this app, next time authenticate yourself by passing userName and password.
 ```
 public void authenticateUser(final String name, final String pswd,
 			final UserEventListener callBack) {
@@ -115,11 +115,42 @@ public void authenticateUser(final String name, final String pswd,
 	}
 ```
 
-__Registering User:__ To use application first you have to register for this application by passing your userName, password and email-id.
-```
+__Create Your Avatar:__ You can also create your own Avatar.
 ```
 
-__Registering User:__ To use application first you have to register for this application by passing your userName, password and email-id.
+public void createAvatar(final String userName, final String avatarName,
+			final String imagePath, final String description,
+			final AvatarEventListener callBack) {
+		final Handler callerThreadHandler = new Handler();
+		new Thread() {
+			@Override
+			public void run() {
+				try {
+					final Avatar avatar = avatarService.createAvatar(
+							avatarName, userName, imagePath, description);
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							callBack.onAvatarCreated(avatar);
+						}
+					});
+				} catch (final App42Exception ex) {
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							if (callBack != null) {
+								System.out.println(ex.toString());
+								callBack.onAvatarCreationFailed(ex);
+							}
+						}
+					});
+				}
+			}
+		}.start();
+	}
+```
+
+__Get User List:__ You can easily get .
 ```
 ```
 

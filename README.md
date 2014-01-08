@@ -3,7 +3,7 @@ Android_Buddy_Management_Using_App42
 
 # About Application
 
-This application shows how can we do Manage our own Buddies by making an Android application using App42API.You can use various features by managing your Buddies like :2. Add User as a Buddy.
+This application shows how can we do Manage our own Buddies by making an Android application using App42API.You can use various features by managing your Buddies like :
 
 1. You can Add/Reject user as Buddy.
 2. You can also block user.
@@ -33,9 +33,9 @@ A. Change App42ApiKey and App42ApiSecret that you have received in step 2 or 3 a
 
 # Design Details:
 
-All source code communication with App42 API is written in  App42ServiceApi.java file.
+All source code communication with App42 API is written in  App42ServiceApi.java file.Here are few coding steps that are required to do your own buddy Management in Android Application.
 
-__Initialize Services:__ At first you have to register on App42 using your APIKEY and SECRETKEY keys. And have to intialiaze all services first.
+__1. Initialize Services:__ At first you have to register on App42 using your APIKEY and SECRETKEY keys. And have to intialiaze all services first.
 
 ```
    
@@ -49,7 +49,7 @@ __Initialize Services:__ At first you have to register on App42 using your APIKE
 		App42API.setOfflineStorage(true);
 	
 ```
-__Registering User:__ To use application first you have to register for this application by passing your userName, password and email-id.
+__2. Registering User:__ To use application first you have to register for this application by passing your userName, password and email-id.
 ```
    
 	public void createUser(final String name, final String pswd,
@@ -82,7 +82,7 @@ __Registering User:__ To use application first you have to register for this app
 	}
 	
 ```
-__Authenticate User:__ Once you register with this app, next time authenticate yourself by passing userName and password.
+__3. Authenticate User:__ Once you register with this app, next time authenticate yourself by passing userName and password.
 ```
 public void authenticateUser(final String name, final String pswd,
 			final UserEventListener callBack) {
@@ -115,7 +115,7 @@ public void authenticateUser(final String name, final String pswd,
 	}
 ```
 
-__Create Your Avatar:__ You can also create your own Avatar.
+__4. Create Your Avatar:__ You can also create your own Avatar.
 ```
 
 public void createAvatar(final String userName, final String avatarName,
@@ -150,15 +150,138 @@ public void createAvatar(final String userName, final String avatarName,
 	}
 ```
 
-__Get User List:__ You can easily get .
+__5. Get User List:__ You can easily get the users that are not your buddies and add them as buddies accordingly.
+```
+public void loaduserList(final BuddyEventListener callBack) {
+		final Handler callerThreadHandler = new Handler();
+		new Thread() {
+			@Override
+			public void run() {
+				try {
+					ArrayList<User> userList = userService.getAllUsers();
+					final ArrayList<String> users = getUserList(userList);
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							callBack.onGetAllUsers(users);
+						}
+					});
+				} catch (final App42Exception ex) {
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							if (callBack != null) {
+								System.out.println(ex.toString());
+								callBack.onError(ex);
+							}
+						}
+					});
+				}
+			}
+		}.start();
+	}
+
+	private ArrayList<String> getUserList(ArrayList<User> userList) {
+		ArrayList<String> users = new ArrayList<String>();
+		
+		for (int i = 0; i < userList.size(); i++) {
+			users.add(userList.get(i).getUserName().toString());
+		}
+		try{
+		ArrayList<String> friends=getRequestList(buddyService.getAllFriends(AppContext.myUserName));
+		if(friends!=null)
+			users.removeAll(friends);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		return users;
+	}
+	private ArrayList<String> getRequestList(ArrayList<Buddy> buddies) {
+		// TODO Auto-generated method stub
+		ArrayList<String> users = new ArrayList<String>();
+		int size = buddies.size();
+		for (int i = 0; i < size; i++) {
+			users.add(buddies.get(i).getBuddyName());
+		}
+		return users;
+	}
+```
+
+__6. Sending Friend Request:__ After getting app users you can easily send friend request using following code.
+```
+public void sendFriendRequest(final String username,
+			final String buddyName, final String message,
+			final BuddyEventListener callBack) {
+		final Handler callerThreadHandler = new Handler();
+		new Thread() {
+			@Override
+			public void run() {
+				try {
+					buddyService
+							.sendFriendRequest(username, buddyName, message);
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							callBack.onFriendRequestSent(true);
+						}
+					});
+				} catch (final App42Exception ex) {
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							if (callBack != null) {
+								callBack.onFriendRequestSent(false);
+							}
+						}
+					});
+				}
+			}
+		}.start();
+	}
+```
+
+__7. Getting Friend Request List:__You have to  get  all friend request first before accepting friend request using following code.
+```
+public void loadInvitationList(final String userName,
+			final BuddyEventListener callBack) {
+		final Handler callerThreadHandler = new Handler();
+		new Thread() {
+			@Override
+			public void run() {
+				try {
+
+					final ArrayList<String> requestList = getRequestList(buddyService.getFriendRequest(userName));
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							callBack.onGetInvitationList(requestList);
+						}
+					});
+				} catch (final App42Exception ex) {
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							if (callBack != null) {
+								callBack.onError(ex);
+							}
+						}
+					});
+				}
+			}
+		}.start();
+	}
+
+```
+__7. Getting Friend Request List:__You have to  get  all friend request first before accepting friend request using following code.
 ```
 ```
 
-__Registering User:__ To use application first you have to register for this application by passing your userName, password and email-id.
+__7. Getting Friend Request List:__You have to  get  all friend request first before accepting friend request using following code.
 ```
 ```
 
-__Registering User:__ To use application first you have to register for this application by passing your userName, password and email-id.
+__7. Getting Friend Request List:__You have to  get  all friend request first before accepting friend request using following code.
 ```
 ```
 

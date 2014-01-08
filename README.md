@@ -115,7 +115,7 @@ public void authenticateUser(final String name, final String pswd,
 	}
 ```
 
-__4. Create Your Avatar:__ You can also create your own Avatar.
+__4. Create Your Avatar:__ You can also create your own Avatar with desired name and desired picture as you look like in this applicatioin.
 ```
 
 public void createAvatar(final String userName, final String avatarName,
@@ -208,7 +208,7 @@ public void loaduserList(final BuddyEventListener callBack) {
 	}
 ```
 
-__6. Sending Friend Request:__ After getting app users you can easily send friend request using following code.
+__6. Send Friend Request:__ After getting app users you can easily send friend request using following code.
 ```
 public void sendFriendRequest(final String username,
 			final String buddyName, final String message,
@@ -241,7 +241,7 @@ public void sendFriendRequest(final String username,
 	}
 ```
 
-__7. Getting Friend Request List:__You have to  get  all friend request first before accepting friend request using following code.
+__7. Get Friend Request List:__You have to get all friend request first before accepting friend request using following code.
 ```
 public void loadInvitationList(final String userName,
 			final BuddyEventListener callBack) {
@@ -304,7 +304,7 @@ public void acceptFriendRequest(final String username,
 	}
 ```
 
-__7. Reject Friend Request:__You can easily reject friend request of a user using following code.
+__9. Reject Friend Request:__You can easily reject friend request of a user using following code.
 ```
 public void rejectFriendRequest(final String username,
 			final String buddyName, final BuddyEventListener callBack) {
@@ -335,7 +335,7 @@ public void rejectFriendRequest(final String username,
 	}
 ```
 
-__7. Block Friend Request:__You have to  get  all friend request first before accepting friend request using following code.
+__10. Block Friend Request:__You can also block  friend request of a user using following code.
 ```
 public void blockFriendRequest(final String userName,
 			final String buddyName, final BuddyEventListener callBack) {
@@ -366,7 +366,7 @@ public void blockFriendRequest(final String userName,
 	}
 ```
 
-__7. Block User:__You have to  get  all friend request first before accepting friend request using following code.
+__11. Block User:__You can also block a user using following code.
 ```
 public void blockUser(final String userName, final String buddyName,
 			final BuddyEventListener callBack) {
@@ -397,7 +397,7 @@ public void blockUser(final String userName, final String buddyName,
 	}
 ```
 
-__7. Get Your Buddy List:__You have to  get  all friend request first before accepting friend request using following code.
+__12. Get Your Buddy List:__ To make any communication with your friends first you have to get your friend list , using following code.
 ```
 public void loadMyBuddyList(final String userName,
 			final BuddyEventListener callBack) {
@@ -428,7 +428,7 @@ public void loadMyBuddyList(final String userName,
 	}
 ```
 
-__7. Send Message To Buddy:__You have to  get  all friend request first before accepting friend request using following code.
+__13. Send Message To Buddy:__ After getting your friend list you can exchange message in form of image and text using following code..
 ```
 public void sendMessageToBuddy(final String username,
 			final String buddyName, final String message,
@@ -461,7 +461,7 @@ public void sendMessageToBuddy(final String username,
 	}
 ```
 
-__7. Get Chat Messages with Buddy:__You have to  get  all friend request first before accepting friend request using following code.
+__14. Get Chat Messages with Buddy:__You Can get All messages that are communicate between you and your friend using following code..
 ```
 public void getAllMessagesFromBuddy(final String username,
 			final String buddyName, final MessageEventListener callBack) {
@@ -511,7 +511,7 @@ public void getAllMessagesFromBuddy(final String username,
 	}
 ```
 
-__7. Creating Group:__You have to  get  all friend request first before accepting friend request using following code.
+__15. Creating Group:__ You can easily create a group first and than add your friends in group and exchange messages between group.
 ```
 public void createGroup(final String username, final String groupname,
 			final BuddyGroupEventListener callBack) {
@@ -543,7 +543,7 @@ public void createGroup(final String username, final String groupname,
 	}
 ```
 
-__7. Getting Your Group List:__You have to  get  all friend request first before accepting friend request using following code.
+__16. Getting Your Group List:__You can easily get All groups , in which you are subscribed.
 ```
 public void loadGroupList(final String userName,
 			final BuddyGroupEventListener callBack) {
@@ -576,7 +576,7 @@ public void loadGroupList(final String userName,
 	}
 ```
 
-__7. Add Friends in Group:__You have to  get  all friend request first before accepting friend request using following code.
+__17. Add Friends in Group:__ If you are owner of the group than you can add friends in that group to make messaging more interesting.
 ```
 public void addFriendsInGroup(final String userName, final String grpName,
 			final ArrayList<String> friends,
@@ -608,7 +608,7 @@ public void addFriendsInGroup(final String userName, final String grpName,
 		}.start();
 	}
 ```
-__7. Getting All Group Friends:__You have to  get  all friend request first before accepting friend request using following code.
+__18. Getting All Group Friends:__You can easily get all group members those are subscribe in that group.
 ```
 public void loadFriednsByGroup(final String userName,
 			final String ownerName, final String groupName,
@@ -644,7 +644,7 @@ public void loadFriednsByGroup(final String userName,
 	}
 
 ```
-_7. Getting All Group Messages:__You have to  get  all friend request first before accepting friend request using followin
+_19. Getting All Group Messages:__Whenever you want to communicate in group first load all previous group messages by all group members.
 
 ```
 public void getAllMessagesFromGroup(final String username,
@@ -680,7 +680,7 @@ public void getAllMessagesFromGroup(final String username,
 
 ```
 
-_7. send Message in Group:__You have to  get  all friend request first before accepting friend request using followin
+_20. send Message in Group:__You can easily send message to group using following code.
 
 ```
 public void sendMessageToGroup(final String username, final String owner,
@@ -714,7 +714,7 @@ public void sendMessageToGroup(final String username, final String owner,
 	}
 ```
 
-_7. Send Picture Message to Group or Friend:__You have to  get  all friend request first before accepting friend request using followin
+_21. Send Picture Message to Group or Friend:__ If you want to share picture image with your friend and group you can easily send it in form of message using this code.
 
 ```
 public void sharePictureMessage(final ImageInfo imageInfo,
@@ -775,7 +775,7 @@ public void sharePictureMessage(final ImageInfo imageInfo,
 
 ```
 
-_7. Gett All Messages:__You have to  get  all friend request first before accepting friend request using followin
+_22. Gett All Messages:__You can also get all messages that are belongs to you ir-respective group or friend messages.
 
 ```
 public void getAllMessages(final String username,

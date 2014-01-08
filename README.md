@@ -576,9 +576,239 @@ public void loadGroupList(final String userName,
 	}
 ```
 
-__7. Getting Your Group List:__You have to  get  all friend request first before accepting friend request using following code.
+__7. Add Friends in Group:__You have to  get  all friend request first before accepting friend request using following code.
 ```
+public void addFriendsInGroup(final String userName, final String grpName,
+			final ArrayList<String> friends,
+			final BuddyGroupEventListener callBack) {
+		final Handler callerThreadHandler = new Handler();
+		new Thread() {
+			@Override
+			public void run() {
+				try {
+
+					buddyService.addFriendToGroup(userName, grpName, friends);
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							callBack.onFriendAddedInGroup();
+						}
+					});
+				} catch (final App42Exception ex) {
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							if (callBack != null) {
+								callBack.onError(ex);
+							}
+						}
+					});
+				}
+			}
+		}.start();
+	}
 ```
-__7. Getting Your Group List:__You have to  get  all friend request first before accepting friend request using following code.
+__7. Getting All Group Friends:__You have to  get  all friend request first before accepting friend request using following code.
 ```
+public void loadFriednsByGroup(final String userName,
+			final String ownerName, final String groupName,
+			final boolean isOwner, final BuddyGroupEventListener callBack) {
+		final Handler callerThreadHandler = new Handler();
+		new Thread() {
+			@Override
+			public void run() {
+				try {
+
+					final ArrayList<String> grpBuddy = getMyBuddyList(userName,
+							ownerName, groupName);
+					final ArrayList<String> friends = getAllFriends(isOwner,
+							userName);
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							callBack.onGetGroupFriends(grpBuddy, friends);
+						}
+					});
+				} catch (final App42Exception ex) {
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							if (callBack != null) {
+								callBack.onError(ex);
+							}
+						}
+					});
+				}
+			}
+		}.start();
+	}
+
 ```
+_7. Getting All Group Messages:__You have to  get  all friend request first before accepting friend request using followin
+
+```
+public void getAllMessagesFromGroup(final String username,
+			final String owner, final String groupname,
+			final MessageEventListener callBack) {
+		final Handler callerThreadHandler = new Handler();
+		new Thread() {
+			@Override
+			public void run() {
+				try {
+
+					final ArrayList<Buddy> buddy = buddyService
+							.getAllMessagesFromGroup(username, owner, groupname);
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							callBack.onGetAllMessages(buddy);
+						}
+					});
+				} catch (final App42Exception ex) {
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							if (callBack != null) {
+								callBack.onError(ex);
+							}
+						}
+					});
+				}
+			}
+		}.start();
+	}
+
+```
+
+_7. send Message in Group:__You have to  get  all friend request first before accepting friend request using followin
+
+```
+public void sendMessageToGroup(final String username, final String owner,
+			final String groupname, final String message,
+			final MessageEventListener callBack) {
+		final Handler callerThreadHandler = new Handler();
+		new Thread() {
+			@Override
+			public void run() {
+				try {
+					buddyService.sendMessageToGroup(username, owner, groupname,
+							message);
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							callBack.onMessageSentToGroup();
+						}
+					});
+				} catch (final App42Exception ex) {
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							if (callBack != null) {
+								callBack.onMessageSendingFailed(ex);
+							}
+						}
+					});
+				}
+			}
+		}.start();
+	}
+```
+
+_7. Send Picture Message to Group or Friend:__You have to  get  all friend request first before accepting friend request using followin
+
+```
+public void sharePictureMessage(final ImageInfo imageInfo,
+			final MessageEventListener callback) {
+		final Handler callingThreadHandler = new Handler();
+		new Thread() {
+			@Override
+			public void run() {
+				try {
+					final boolean uploadStatus = uploadPhoto(imageInfo);
+					callingThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							if (callback != null) {
+								callback.onMesssageSentToBuddy();
+							}
+						}
+					});
+				} catch (final App42Exception ex) {
+					callingThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							if (callback != null) {
+								callback.onMessageSendingFailed(ex);
+							}
+						}
+					});
+				}
+			}
+		}.start();
+
+	}
+
+	/*
+	 * This function allows user to upload photo
+	 * 
+	 * @param jsonData contains information of photo,user and friend
+	 */
+	private boolean uploadPhoto(ImageInfo imageInfo) throws App42Exception {
+		String photoID = "Id" + new Date().getTime();
+		Upload uploadObj = uploadService.uploadFileForUser(photoID,
+				AppContext.myUserName,
+				imageInfo.getImagePath(), UploadFileType.IMAGE,"Hey");
+		if (uploadObj.isResponseSuccess()) {
+			String url=uploadObj.getFileList().get(0)
+					.getUrl();
+			if(imageInfo.isBuudy()){
+				buddyService.sendMessageToFriend(AppContext.myUserName, imageInfo.getBuddyName(), url);
+			}
+			else {
+				buddyService.sendMessageToGroup(AppContext.myUserName, imageInfo.getOwnerName(), imageInfo.getGroupname(), url);
+			}
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+```
+
+_7. Gett All Messages:__You have to  get  all friend request first before accepting friend request using followin
+
+```
+public void getAllMessages(final String username,
+			final MessageEventListener callBack) {
+		final Handler callerThreadHandler = new Handler();
+		new Thread() {
+			@Override
+			public void run() {
+				try {
+					final ArrayList<Buddy> buddy = buddyService
+							.getAllMessages(username);
+
+					System.out.println("Getting datat" + buddy.toString());
+
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							callBack.onGetAllMessages(buddy);
+						}
+					});
+				} catch (final App42Exception ex) {
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							if (callBack != null) {
+								callBack.onError(ex);
+							}
+						}
+					});
+				}
+			}
+		}.start();
+	}
+
+```
+

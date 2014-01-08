@@ -273,15 +273,312 @@ public void loadInvitationList(final String userName,
 	}
 
 ```
-__7. Getting Friend Request List:__You have to  get  all friend request first before accepting friend request using following code.
+__8. Accept Friend Request :__You can accept friend request using following code.
 ```
+public void acceptFriendRequest(final String username,
+			final String buddyName, final BuddyEventListener callBack) {
+		final Handler callerThreadHandler = new Handler();
+		new Thread() {
+			@Override
+			public void run() {
+				try {
+					buddyService.acceptFriendRequest(username, buddyName);
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							callBack.onAcceptRequest(true, buddyName);
+						}
+					});
+				} catch (final App42Exception ex) {
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							if (callBack != null) {
+								callBack.onAcceptRequest(false, buddyName);
+							}
+						}
+					});
+				}
+			}
+		}.start();
+	}
 ```
 
-__7. Getting Friend Request List:__You have to  get  all friend request first before accepting friend request using following code.
+__7. Reject Friend Request:__You can easily reject friend request of a user using following code.
 ```
+public void rejectFriendRequest(final String username,
+			final String buddyName, final BuddyEventListener callBack) {
+		final Handler callerThreadHandler = new Handler();
+		new Thread() {
+			@Override
+			public void run() {
+				try {
+					buddyService.rejectFriendRequest(username, buddyName);
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							callBack.onRejectRequest(true, buddyName);
+						}
+					});
+				} catch (final App42Exception ex) {
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							if (callBack != null) {
+								callBack.onRejectRequest(false, buddyName);
+							}
+						}
+					});
+				}
+			}
+		}.start();
+	}
 ```
 
-__7. Getting Friend Request List:__You have to  get  all friend request first before accepting friend request using following code.
+__7. Block Friend Request:__You have to  get  all friend request first before accepting friend request using following code.
 ```
+public void blockFriendRequest(final String userName,
+			final String buddyName, final BuddyEventListener callBack) {
+		final Handler callerThreadHandler = new Handler();
+		new Thread() {
+			@Override
+			public void run() {
+				try {
+					buddyService.blockFriendRequest(userName, buddyName);
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							callBack.onBlockBuddyRequest(true, buddyName);
+						}
+					});
+				} catch (final App42Exception ex) {
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							if (callBack != null) {
+								callBack.onBlockBuddyRequest(false, buddyName);
+							}
+						}
+					});
+				}
+			}
+		}.start();
+	}
 ```
 
+__7. Block User:__You have to  get  all friend request first before accepting friend request using following code.
+```
+public void blockUser(final String userName, final String buddyName,
+			final BuddyEventListener callBack) {
+		final Handler callerThreadHandler = new Handler();
+		new Thread() {
+			@Override
+			public void run() {
+				try {
+					buddyService.blockUser(userName, buddyName);
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							callBack.onBuddyBlocked(true);
+						}
+					});
+				} catch (final App42Exception ex) {
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							if (callBack != null) {
+								callBack.onBuddyBlocked(false);
+							}
+						}
+					});
+				}
+			}
+		}.start();
+	}
+```
+
+__7. Get Your Buddy List:__You have to  get  all friend request first before accepting friend request using following code.
+```
+public void loadMyBuddyList(final String userName,
+			final BuddyEventListener callBack) {
+		final Handler callerThreadHandler = new Handler();
+		new Thread() {
+			@Override
+			public void run() {
+				try {
+					final ArrayList<String> buddyList = getRequestList(buddyService.getAllFriends(userName));
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							callBack.onGetBuddyList(buddyList);
+						}
+					});
+				} catch (final App42Exception ex) {
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							if (callBack != null) {
+								callBack.onError(ex);
+							}
+						}
+					});
+				}
+			}
+		}.start();
+	}
+```
+
+__7. Send Message To Buddy:__You have to  get  all friend request first before accepting friend request using following code.
+```
+public void sendMessageToBuddy(final String username,
+			final String buddyName, final String message,
+			final MessageEventListener callBack) {
+		final Handler callerThreadHandler = new Handler();
+		new Thread() {
+			@Override
+			public void run() {
+				try {
+					buddyService.sendMessageToFriend(username, buddyName,
+							message);
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							callBack.onMesssageSentToBuddy();
+						}
+					});
+				} catch (final App42Exception ex) {
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							if (callBack != null) {
+								callBack.onMessageSendingFailed(ex);
+							}
+						}
+					});
+				}
+			}
+		}.start();
+	}
+```
+
+__7. Get Chat Messages with Buddy:__You have to  get  all friend request first before accepting friend request using following code.
+```
+public void getAllMessagesFromBuddy(final String username,
+			final String buddyName, final MessageEventListener callBack) {
+		final Handler callerThreadHandler = new Handler();
+		new Thread() {
+			@Override
+			public void run() {
+				try {
+
+					final ArrayList<Buddy> buddy = getBuddyChat(username,
+							buddyName);
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							callBack.onGetAllMessages(buddy);
+						}
+					});
+				} catch (final App42Exception ex) {
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							if (callBack != null) {
+								callBack.onError(ex);
+							}
+						}
+					});
+				}
+			}
+		}.start();
+	}
+
+	private ArrayList<Buddy> getBuddyChat(String userName, String buddyName) {
+		ArrayList<Buddy> buddy = new ArrayList<Buddy>();
+		try {
+			buddy = buddyService.getAllMessagesFromBuddy(userName, buddyName);
+		} catch (App42Exception e) {
+			e.printStackTrace();
+		}
+		try {
+			buddy.addAll(buddyService.getAllMessagesFromBuddy(buddyName,
+					userName));
+		} catch (App42Exception e) {
+			e.printStackTrace();
+		}
+
+		return buddy;
+	}
+```
+
+__7. Creating Group:__You have to  get  all friend request first before accepting friend request using following code.
+```
+public void createGroup(final String username, final String groupname,
+			final BuddyGroupEventListener callBack) {
+		final Handler callerThreadHandler = new Handler();
+		new Thread() {
+			@Override
+			public void run() {
+				try {
+					final Buddy buddy = buddyService.createGroupByUser(
+							username, groupname);
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							callBack.onGroupCreated(true, buddy);
+						}
+					});
+				} catch (final App42Exception ex) {
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							if (callBack != null) {
+								callBack.onGroupCreated(false, null);
+							}
+						}
+					});
+				}
+			}
+		}.start();
+	}
+```
+
+__7. Getting Your Group List:__You have to  get  all friend request first before accepting friend request using following code.
+```
+public void loadGroupList(final String userName,
+			final BuddyGroupEventListener callBack) {
+		final Handler callerThreadHandler = new Handler();
+		new Thread() {
+			@Override
+			public void run() {
+				try {
+
+					final ArrayList<Buddy> grpBuddy = buddyService
+							.getAllGroups(userName);
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							callBack.onBuddyGroupList(grpBuddy);
+						}
+					});
+				} catch (final App42Exception ex) {
+					callerThreadHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							if (callBack != null) {
+								callBack.onError(ex);
+							}
+						}
+					});
+				}
+			}
+		}.start();
+	}
+```
+
+__7. Getting Your Group List:__You have to  get  all friend request first before accepting friend request using following code.
+```
+```
+__7. Getting Your Group List:__You have to  get  all friend request first before accepting friend request using following code.
+```
+```

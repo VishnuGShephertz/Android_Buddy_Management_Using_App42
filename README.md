@@ -16,7 +16,7 @@ This application shows how can we do Manage our own Buddies by making an Android
 
 # Running Sample
 
-This is a sample Android Buddy Mange app is made by using App42 back-end platform. It uses User,Upload,Buddy,Avatart service of App42 platform.It also uses Offline storage of App42 platform.
+This is a sample Android Buddy Mange app is made by using App42 back-end platform. It uses User,Upload,Buddy,Avatart service of App42 platform.It also uses Offline storage and offline cache management of App42 platform.
 Here are the few easy steps to run this sample app.
 
 1. [Register] (https://apphq.shephertz.com/register) with App42 platform.
@@ -49,7 +49,32 @@ __1. Initialize Services:__ At first you have to register on App42 using your AP
 		App42API.setOfflineStorage(true);
 	
 ```
-__2. Registering User:__ To use application first you have to register for this application by passing your userName, password and email-id.
+
+
+__2. Offline Cache Management:__ Offline caching enables your application to read data from local cache if network is not available. There are different cache levels that can be set using API and have been explained below.
+
+A. Policy.NETWORK_FIRST – This policy enables data to be fetched from network and then update cache. If network is not available, data is fetched from cache.This type of caching is used in this application.
+
+```
+		App42CacheManager.setPolicy(Policy.NETWORK_FIRST);
+	
+```
+
+B. Policy.CACHE_FIRST – Setting this policy will enable all read data to be first looked in to cache if data is available and not expired then it will return from cache otherwise network request will be made and cache will be updated for the same. You can set cache expiry time by using API as explained below. By default cache expiry is set to an hour.
+
+```
+	App42CacheManager.setPolicy(Policy.CACHE_FIRST); ; 
+	App42CacheManager.setExpiryInMinutes("");
+	
+```
+C. Policy.NOCACHE – By default App42 SDK uses this policy and does not use any cache and always reads data from network only.
+
+
+__3. Offline Management:__ Offline storage allows you to post data locally in case network is not available and syncs it with server later when network is available. This is useful in many scenarios e.g. if you are useing this application in offline mode as per offline caching you have your application data, If you want to send friend request to a user than to make application more efficient it uses offline caching where request  will be saved locally in case of network unavailability and will be later synced with server when network availability resumes.
+```
+	App42API.setOfflineStorage(true);
+```
+__4. Registering User:__ To use application first you have to register for this application by passing your userName, password and email-id.
 ```
    
 	public void createUser(final String name, final String pswd,
@@ -82,7 +107,7 @@ __2. Registering User:__ To use application first you have to register for this 
 	}
 	
 ```
-__3. Authenticate User:__ Once you register with this app, next time authenticate yourself by passing userName and password.
+__5. Authenticate User:__ Once you register with this app, next time authenticate yourself by passing userName and password.
 ```
 public void authenticateUser(final String name, final String pswd,
 			final UserEventListener callBack) {
@@ -115,7 +140,7 @@ public void authenticateUser(final String name, final String pswd,
 	}
 ```
 
-__4. Create Your Avatar:__ You can also create your own Avatar with desired name and desired picture as you look like in this applicatioin.
+__6. Create Your Avatar:__ You can also create your own Avatar with desired name and desired picture as you look like in this applicatioin.
 ```
 
 public void createAvatar(final String userName, final String avatarName,
@@ -150,7 +175,7 @@ public void createAvatar(final String userName, final String avatarName,
 	}
 ```
 
-__5. Get User List:__ You can easily get the users that are not your buddies and add them as buddies accordingly.
+__7. Get User List:__ You can easily get the users that are not your buddies and add them as buddies accordingly.
 ```
 public void loaduserList(final BuddyEventListener callBack) {
 		final Handler callerThreadHandler = new Handler();
@@ -208,7 +233,7 @@ public void loaduserList(final BuddyEventListener callBack) {
 	}
 ```
 
-__6. Send Friend Request:__ After getting app users you can easily send friend request using following code.
+__8. Send Friend Request:__ After getting app users you can easily send friend request using following code.
 ```
 public void sendFriendRequest(final String username,
 			final String buddyName, final String message,
@@ -241,7 +266,7 @@ public void sendFriendRequest(final String username,
 	}
 ```
 
-__7. Get Friend Request List:__You have to get all friend request first before accepting friend request using following code.
+__9. Get Friend Request List:__You have to get all friend request first before accepting friend request using following code.
 ```
 public void loadInvitationList(final String userName,
 			final BuddyEventListener callBack) {
@@ -273,7 +298,7 @@ public void loadInvitationList(final String userName,
 	}
 
 ```
-__8. Accept Friend Request :__You can accept friend request using following code.
+__10. Accept Friend Request :__You can accept friend request using following code.
 ```
 public void acceptFriendRequest(final String username,
 			final String buddyName, final BuddyEventListener callBack) {
@@ -304,7 +329,7 @@ public void acceptFriendRequest(final String username,
 	}
 ```
 
-__9. Reject Friend Request:__You can easily reject friend request of a user using following code.
+__11. Reject Friend Request:__You can easily reject friend request of a user using following code.
 ```
 public void rejectFriendRequest(final String username,
 			final String buddyName, final BuddyEventListener callBack) {
@@ -335,7 +360,7 @@ public void rejectFriendRequest(final String username,
 	}
 ```
 
-__10. Block Friend Request:__You can also block  friend request of a user using following code.
+__12. Block Friend Request:__You can also block  friend request of a user using following code.
 ```
 public void blockFriendRequest(final String userName,
 			final String buddyName, final BuddyEventListener callBack) {
@@ -366,7 +391,7 @@ public void blockFriendRequest(final String userName,
 	}
 ```
 
-__11. Block User:__You can also block a user using following code.
+__13. Block User:__You can also block a user using following code.
 ```
 public void blockUser(final String userName, final String buddyName,
 			final BuddyEventListener callBack) {
@@ -397,7 +422,7 @@ public void blockUser(final String userName, final String buddyName,
 	}
 ```
 
-__12. Get Your Buddy List:__ To make any communication with your friends first you have to get your friend list , using following code.
+__14. Get Your Buddy List:__ To make any communication with your friends first you have to get your friend list , using following code.
 ```
 public void loadMyBuddyList(final String userName,
 			final BuddyEventListener callBack) {
@@ -428,7 +453,7 @@ public void loadMyBuddyList(final String userName,
 	}
 ```
 
-__13. Send Message To Buddy:__ After getting your friend list you can exchange message in form of image and text using following code..
+__15. Send Message To Buddy:__ After getting your friend list you can exchange message in form of image and text using following code..
 ```
 public void sendMessageToBuddy(final String username,
 			final String buddyName, final String message,
@@ -461,7 +486,7 @@ public void sendMessageToBuddy(final String username,
 	}
 ```
 
-__14. Get Chat Messages with Buddy:__You Can get All messages that are communicate between you and your friend using following code..
+__16. Get Chat Messages with Buddy:__You Can get All messages that are communicate between you and your friend using following code..
 ```
 public void getAllMessagesFromBuddy(final String username,
 			final String buddyName, final MessageEventListener callBack) {
@@ -511,7 +536,7 @@ public void getAllMessagesFromBuddy(final String username,
 	}
 ```
 
-__15. Creating Group:__ You can easily create a group first and than add your friends in group and exchange messages between group.
+__17. Creating Group:__ You can easily create a group first and than add your friends in group and exchange messages between group.
 ```
 public void createGroup(final String username, final String groupname,
 			final BuddyGroupEventListener callBack) {
@@ -543,7 +568,7 @@ public void createGroup(final String username, final String groupname,
 	}
 ```
 
-__16. Getting Your Group List:__You can easily get All groups , in which you are subscribed.
+__18. Getting Your Group List:__You can easily get All groups , in which you are subscribed.
 ```
 public void loadGroupList(final String userName,
 			final BuddyGroupEventListener callBack) {
@@ -576,7 +601,7 @@ public void loadGroupList(final String userName,
 	}
 ```
 
-__17. Add Friends in Group:__ If you are owner of the group than you can add friends in that group to make messaging more interesting.
+__19. Add Friends in Group:__ If you are owner of the group than you can add friends in that group to make messaging more interesting.
 ```
 public void addFriendsInGroup(final String userName, final String grpName,
 			final ArrayList<String> friends,
@@ -608,7 +633,7 @@ public void addFriendsInGroup(final String userName, final String grpName,
 		}.start();
 	}
 ```
-__18. Getting All Group Friends:__You can easily get all group members those are subscribe in that group.
+__20. Getting All Group Friends:__You can easily get all group members those are subscribe in that group.
 ```
 public void loadFriednsByGroup(final String userName,
 			final String ownerName, final String groupName,
@@ -644,7 +669,7 @@ public void loadFriednsByGroup(final String userName,
 	}
 
 ```
-_19. Getting All Group Messages:__Whenever you want to communicate in group first load all previous group messages by all group members.
+__21. Getting All Group Messages:__Whenever you want to communicate in group first load all previous group messages by all group members.
 
 ```
 public void getAllMessagesFromGroup(final String username,
@@ -680,7 +705,7 @@ public void getAllMessagesFromGroup(final String username,
 
 ```
 
-_20. send Message in Group:__You can easily send message to group using following code.
+__22. send Message in Group:__You can easily send message to group using following code.
 
 ```
 public void sendMessageToGroup(final String username, final String owner,
@@ -714,7 +739,7 @@ public void sendMessageToGroup(final String username, final String owner,
 	}
 ```
 
-_21. Send Picture Message to Group or Friend:__ If you want to share picture image with your friend and group you can easily send it in form of message using this code.
+__23. Send Picture Message to Group or Friend:__ If you want to share picture image with your friend and group you can easily send it in form of message using this code.
 
 ```
 public void sharePictureMessage(final ImageInfo imageInfo,
@@ -775,7 +800,7 @@ public void sharePictureMessage(final ImageInfo imageInfo,
 
 ```
 
-_22. Gett All Messages:__You can also get all messages that are belongs to you ir-respective group or friend messages.
+__24. Gett All Messages:__You can also get all messages that are belongs to you ir-respective group or friend messages.
 
 ```
 public void getAllMessages(final String username,

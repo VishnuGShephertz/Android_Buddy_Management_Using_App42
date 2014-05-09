@@ -75,7 +75,7 @@ public class InvitationAdapter extends BaseAdapter {
 				@Override
 				public void onClick(View arg0) {
 					// TODO Auto-generated method stub
-					((InvitationList)mContext).acceptRequest(name);
+					((InvitationList)mContext).rejectRequest(name);
 				}
 			});
 		 
@@ -84,7 +84,7 @@ public class InvitationAdapter extends BaseAdapter {
 				@Override
 				public void onClick(View arg0) {
 					// TODO Auto-generated method stub
-					((InvitationList)mContext).rejectRequest(name);
+					((InvitationList)mContext).acceptRequest(name);
 				}
 			});
 		 
